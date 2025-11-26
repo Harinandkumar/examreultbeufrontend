@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>BEU Result (Replica UI)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<style>
+  /* Page frame to mimic official print-style sheet */
+  :root{
+    --accent:#ff3300;
+    --muted:#666;
+    --border:#A0A0A0;
+    --paper-bg:#f1f1f1;
+  }
+  html,body{height:100%;margin:0;background:var(--paper-bg);font-family:Tahoma, Arial, Helvetica, sans-serif;color:#222}
+  .page-wrap{max-width:920px;margin:28px auto;padding:26px;background:#fff;border-radius:6px;box-shadow:0 2px 0 rgba(0,0,0,0.06);border:1px solid #dfdfdf;position:relative}
+  /* small view top-right link */
+  .top-actions{position:absolute;right:18px;top:14px;font-size:13px}
+  .top-actions a{color:#333;text-decoration:none}
+  /* header */
+  .header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .header .logo img{max-width:220px;height:auto;display:block}
+  .title-block{text-align:center;margin:8px 0 12px}
+  .title-big{font-weight:800;letter-spacing:1px;font-size:24px}
+  .title-sub{color:var(--accent);font-weight:700;margin-top:6px;font-size:13px}
+  /* meta table */
+  .meta, .info-table{width:100%;border-collapse:collapse;margin-top:12px}
+  .meta td{border:1px solid var(--border);padding:8px;font-size:13px}
+  .meta .label{width:180px;font-weight:600;background:#fff}
+  /* grid tables */
+  table.results{width:100%;border-collapse:collapse;margin-top:14px}
+  table.results caption{font-weight:700;margin-bottom:6px}
+  table.results th, table.results td{border:1px solid var(--border);padding:8px;font-size:13px;text-align:left}
+  table.results th{text-align:center;background:#f6f6f6;font-weight:700}
+  table.results td.center{ text-align:center }
+  /* SGPA table */
+  .sgpa-box{margin-top:14px}
+  .note{margin-top:12px;font-size:13px}
+  .remarks{border:1px solid var(--border);padding:10px;margin-top:10px}
+  /* watermark styling */
+  .watermark{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);opacity:0.14;pointer-events:none;
+    width:58%;height:auto;z-index:0;
+  }
+  /* hidden class */
+  .hidden{display:none}
+  /* search area */
+  .search-area{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:end}
+  .search-area input, .search-area select{padding:8px;border:1px solid #ccc;border-radius:4px;font-size:14px}
+  .btn{padding:8px 12px;border-radius:6px;border:1px solid #bbb;background:#fff;cursor:pointer;font-weight:700}
+  .btn.primary{background:var(--accent);color:#fff;border:none}
+  .status{margin-left:12px;font-weight:600;color:var(--muted)}
+  /* print button area */
+  .print-area{text-align:center;margin-top:12px}
+  /* responsive */
+  @media (max-width:760px){
+    .header{flex-direction:column;align-items:center}
+    .title-big{font-size:20px}
+    .page-wrap{margin:12px;padding:12px}
+  }
+  @media print{
+    body{background:#fff}
+    .search-area, .top-actions, .status {display:none}
+    .page-wrap {box-shadow:none;border:none;margin:0;padding:0}
+    .watermark{opacity:0.08}
+  }
+</style>
+</head>
+<body>
+  <div style="max-width:1100px;margin:8px auto;padding:6px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap">
+      <div style="font-weight:700">BEU Result Tool </div>
+    </div>
+  </div>
+
+  <div class="page-wrap" id="page">
+    <div class="top-actions"><a href="#" id="backLink">View another Result</a></div>
+
+    <!-- header -->
+    <div class="header" style="position:relative;z-index:2">
+      <div class="logo"><img src="BEUP_ENlogo1.png" alt="BEU Logo"></div>
+      <div style="flex:1">
+        <div class="title-block">
+          <div class="title-big">BIHAR ENGINEERING UNIVERSITY, PATNA</div>
+          <div class="title-sub">B.Tech. 5<sup>th</sup> Semester Examination, 2024</div>
+        </div>
+      </div>
+      <div style="width:120px"></div>
+    </div>
+
+    <!-- watermark image centered -->
+    <img src="logowatermark.png" class="watermark" alt="watermark"/>
+
+    <!-- search area -->
+    <div style="margin-top:10px;position:relative;z-index:2">
+      <div class="search-area">
+        <div>
+          <label for="regInput" style="display:block;font-weight:700;margin-bottom:6px">Registration No</label>
+          <input id="regInput" placeholder="e.g. 22152159009" />
+        </div>
+        <div>
+          <label for="semesterSelect" style="display:block;font-weight:700;margin-bottom:6px">Semester</label>
+          <select id="semesterSelect">
+            <option value="I">I</option><option value="II">II</option><option value="III">III</option>
+            <option value="IV">IV</option><option value="V" selected>V</option><option value="VI">VI</option>
+            <option value="VII">VII</option><option value="VIII">VIII</option>
+          </select>
+        </div>
+        <div>
+          <label for="examYear" style="display:block;font-weight:700;margin-bottom:6px">Exam Year</label>
+          <input id="examYear" value="2024" style="width:90px"/>
+        </div>
+        <div>
+          <label for="examHeld" style="display:block;font-weight:700;margin-bottom:6px">Exam Held</label>
+          <input id="examHeld" value="July/2025" style="width:140px"/>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:8px">
+          <button id="getBtn" class="btn primary">Get Result</button>
+          <button id="refreshBtn" class="btn">Refresh</button>
+          <button id="printBtn" class="btn">Print</button>
+          <img src="printbutton.png" alt="print" style="height:34px;margin-left:8px"/>
+          <span id="status" class="status">Status: Idle</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- official-styled meta -->
+    <table class="meta" style="margin-top:14px;position:relative;z-index:2">
+      <tr>
+        <td class="label"><strong>Semester :</strong> <span id="semesterLabel">-</span></td>
+        <td><strong>Examination(Month/Year) :</strong> <span id="examHeldLabel">-</span></td>
+      </tr>
+    </table>
+
+    <table class="meta" style="margin-top:8px;position:relative;z-index:2">
+      <tr>
+        <td class="label"><strong>Registration No:</strong></td>
+        <td colspan="3"><span id="regLabel" style="font-weight:700">-</span></td>
+      </tr>
+      <tr>
+        <td class="label"><strong>Student Name:</strong></td>
+        <td colspan="3"><span id="nameLabel" style="font-weight:700">-</span></td>
+      </tr>
+      <tr>
+        <td class="label"><strong>Father Name:</strong></td>
+        <td><span id="fatherLabel">-</span></td>
+        <td class="label"><strong>MotherName:</strong></td>
+        <td><span id="motherLabel">-</span></td>
+      </tr>
+      <tr>
+        <td class="label"><strong>College Name:</strong></td>
+        <td colspan="3"><span id="collegeCode">-</span> - <span id="collegeName">-</span></td>
+      </tr>
+      <tr>
+        <td class="label"><strong>Course Name:</strong></td>
+        <td colspan="3"><span id="courseCode">-</span> - <span id="courseName">-</span></td>
+      </tr>
+    </table>
+
+    <!-- THEORY table (hidden until data) -->
+    <div id="theoryWrap" class="hidden" style="position:relative;z-index:2">
+      <table class="results" id="theoryTable">
+        <caption>THEORY</caption>
+        <thead>
+          <tr>
+            <th>Subject Code</th><th>Subject Name</th><th>ESE</th><th>IA</th><th>Total</th><th>Grade</th><th>Credit</th>
+          </tr>
+        </thead>
+        <tbody id="theoryBody"></tbody>
+      </table>
+    </div>
+
+    <!-- PRACTICAL -->
+    <div id="practicalWrap" class="hidden" style="position:relative;z-index:2">
+      <table class="results" id="practicalTable">
+        <caption>PRACTICAL</caption>
+        <thead>
+          <tr>
+            <th>Subject Code</th><th>Subject Name</th><th>ESE</th><th>IA</th><th>Total</th><th>Grade</th><th>Credit</th>
+          </tr>
+        </thead>
+        <tbody id="practicalBody"></tbody>
+      </table>
+    </div>
+
+    <!-- SGPA / CGPA block (hidden until result) -->
+    <div id="sgpaWrap" class="hidden" style="position:relative;z-index:2">
+      <table class="results" style="width:100%">
+        <tbody>
+          <tr>
+            <td style="text-align:right"><strong>SGPA :</strong> <span id="grossSgpa" style="font-weight:700">-</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="results" style="margin-top:10px">
+        <thead>
+          <tr style="text-align:center">
+            <th>Semester</th><th>I</th><th>II</th><th>III</th><th>IV</th><th>V</th><th>VI</th><th>VII</th><th>VIII</th><th>Cur. CGPA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="text-align:center">
+            <td class="center">SGPA</td>
+            <td id="sgpa_I">-</td><td id="sgpa_II">-</td><td id="sgpa_III">-</td><td id="sgpa_IV">-</td>
+            <td id="sgpa_V">-</td><td id="sgpa_VI">-</td><td id="sgpa_VII">-</td><td id="sgpa_VIII">-</td>
+            <td id="cur_cgpa">-</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- remarks and publish date (hidden until result) -->
+    <div id="remarksWrap" class="hidden">
+      <div class="remarks" style="position:relative;z-index:2">
+        <strong>Remarks: </strong> <span id="remarksValue" style="font-weight:700;color:#ff2d6d">-</span><br>
+        <small>Publish Date : <span id="publish_date">-</span></small>
+      </div>
+    </div>
+
+    <div class="note" style="position:relative;z-index:2">
+      <strong>NOTE:</strong>
+      <ul style="margin:6px 0 0 18px">
+        <li>ESE : End Semester Exam</li>
+        <li>IA : Internal Assessment</li>
+        <li>SGPA : Semester Grade Point Average</li>
+        <li>CGPA : Cumulative Grade Point Average</li>
+        <li>WEB COPY : Not valid for official purpose.</li>
+      </ul>
+    </div>
+
+    <div class="print-area">
+      <a href="#" id="hrefPrint" title="Print"><img src="printbutton.png" alt="Print" style="height:36px"/></a>
+    </div>
+  </div>
+
+<script>
+  // Auto-detect backend
+  const API_BASE = (function(){
+    if(location.hostname === "localhost" || location.hostname === "127.0.0.1") return "http://localhost:3000";
+    // change this if your render URL differs
+    return "https://exambeuresultbackend.onrender.com";
+  })();
+  document.getElementById('backendLabel').textContent = API_BASE;
+
+  const API = API_BASE.replace(/\/+$/,'') + "/result";
+
+  // elements
+  const regInput = document.getElementById("regInput");
+  const semSelect = document.getElementById("semesterSelect");
+  const getBtn = document.getElementById("getBtn");
+  const refreshBtn = document.getElementById("refreshBtn");
+  const printBtn = document.getElementById("printBtn");
+  const statusEl = document.getElementById("status");
+
+  const theoryWrap = document.getElementById("theoryWrap");
+  const practicalWrap = document.getElementById("practicalWrap");
+  const sgpaWrap = document.getElementById("sgpaWrap");
+  const remarksWrap = document.getElementById("remarksWrap");
+  const theoryBody = document.getElementById("theoryBody");
+  const practicalBody = document.getElementById("practicalBody");
+
+  function setStatus(msg,isError=false){
+    statusEl.textContent = "Status: " + msg;
+    statusEl.style.color = isError ? "red" : "#444";
+  }
+
+  function hideResultSections(){
+    theoryWrap.classList.add("hidden");
+    practicalWrap.classList.add("hidden");
+    sgpaWrap.classList.add("hidden");
+    remarksWrap.classList.add("hidden");
+  }
+
+  function clearPage(){
+    // meta
+    ["regLabel","nameLabel","fatherLabel","motherLabel","collegeCode","collegeName","courseCode","courseName","semesterLabel","examHeldLabel","grossSgpa","publish_date","remarksValue"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.textContent = "-";
+    });
+    // sgpa grid
+    ["I","II","III","IV","V","VI","VII","VIII"].forEach(s=>{
+      const el = document.getElementById("sgpa_"+s);
+      if(el) el.textContent = "-";
+    });
+    document.getElementById("cur_cgpa").textContent = "-";
+    // tables
+    theoryBody.innerHTML = "";
+    practicalBody.innerHTML = "";
+    // hide result areas until a successful fetch
+    hideResultSections();
+  }
+
+  function addRow(tbody, r){
+    const tr = document.createElement("tr");
+    tr.innerHTML = "<td class='center' style='text-align:center'>"+(r.code||"")+"</td>"
+                 + "<td>"+(r.name||"")+"</td>"
+                 + "<td class='center' style='text-align:center'>"+(r.ese||"")+"</td>"
+                 + "<td class='center' style='text-align:center'>"+(r.ia||"")+"</td>"
+                 + "<td class='center' style='text-align:center'>"+(r.total||"")+"</td>"
+                 + "<td class='center' style='text-align:center'>"+(r.grade||"")+"</td>"
+                 + "<td class='center' style='text-align:center'>"+(r.credit||"")+"</td>";
+    tbody.appendChild(tr);
+  }
+
+  function fillFromData(d){
+    // meta
+    document.getElementById("regLabel").textContent = d.redg_no || regInput.value || "-";
+    document.getElementById("nameLabel").textContent = d.name || "-";
+    document.getElementById("fatherLabel").textContent = d.father_name || "-";
+    document.getElementById("motherLabel").textContent = d.mother_name || "-";
+    document.getElementById("collegeCode").textContent = d.college_code || "-";
+    document.getElementById("collegeName").textContent = d.college_name || "-";
+    document.getElementById("courseCode").textContent = d.course_code || "-";
+    document.getElementById("courseName").textContent = d.course || "-";
+    document.getElementById("semesterLabel").textContent = d.semester || semSelect.value || "-";
+    document.getElementById("examHeldLabel").textContent = d.exam_held || document.getElementById("examHeld").value || "-";
+    document.getElementById("grossSgpa").textContent = (d.sgpa && d.sgpa.length) ? (d.sgpa[ (Number(d.semIndex)||0) ] || "-") : (d.sgpa||"-");
+    document.getElementById("publish_date").textContent = d.publish_date || d.publishDate || "-";
+    document.getElementById("remarksValue").textContent = d.fail_any || d.remarks || "-";
+
+    // SGPA row
+    const sg = Array.isArray(d.sgpa) ? d.sgpa : (d.sgpa ? d.sgpa.toString().split(",") : []);
+    ["I","II","III","IV","V","VI","VII","VIII"].forEach((sem,i)=>{
+      const el = document.getElementById("sgpa_"+sem);
+      if(el) el.textContent = (sg[i] && sg[i].toString().trim()!=="") ? sg[i] : "-";
+    });
+    document.getElementById("cur_cgpa").textContent = d.cgpa || "-";
+
+    // theory/practical
+    if(d.theorySubjects && d.theorySubjects.length){
+      theoryBody.innerHTML = "";
+      d.theorySubjects.forEach(s => addRow(theoryBody, s));
+      theoryWrap.classList.remove("hidden");
+    } else {
+      theoryBody.innerHTML = "";
+      theoryWrap.classList.add("hidden");
+    }
+    if(d.practicalSubjects && d.practicalSubjects.length){
+      practicalBody.innerHTML = "";
+      d.practicalSubjects.forEach(s => addRow(practicalBody, s));
+      practicalWrap.classList.remove("hidden");
+    } else {
+      practicalBody.innerHTML = "";
+      practicalWrap.classList.add("hidden");
+    }
+
+    // show SGPA & remarks sections after successful data
+    sgpaWrap.classList.remove("hidden");
+    remarksWrap.classList.remove("hidden");
+  }
+
+  async function fetchResult(){
+    const reg = (regInput.value||"").trim();
+    const sem = (semSelect.value||"").trim();
+    const year = (document.getElementById("examYear")||{value:"2024"}).value;
+    const examHeld = (document.getElementById("examHeld")||{value:"July/2025"}).value;
+
+    if(!reg){ setStatus("Please enter Registration No", true); return; }
+    setStatus("Fetching...");
+    clearPage();
+
+    try{
+      const url = API + "?reg="+encodeURIComponent(reg)+"&sem="+encodeURIComponent(sem)+"&year="+encodeURIComponent(year)+"&examHeld="+encodeURIComponent(examHeld);
+      const r = await fetch(url, {cache:"no-store"});
+      if(!r.ok){
+        const txt = await r.text().catch(()=>"");
+        setStatus("Server returned "+r.status+". "+txt.slice(0,200), true);
+        return;
+      }
+      const j = await r.json().catch(()=>null);
+      if(!j){ setStatus("Invalid JSON response", true); return; }
+      if(j.success && j.data){
+        fillFromData(j.data);
+        setStatus("Result loaded (" + (j.from || "source") + ")");
+      } else {
+        // show no result message but keep tables hidden
+        let msg = "No Result Found";
+        if(j && (j.error || j.message)) msg += ": " + (j.error || j.message);
+        setStatus(msg, true);
+      }
+    } catch(err){
+      setStatus("Network / Proxy error: " + (err.message||err), true);
+    }
+  }
+
+  // events
+  getBtn.addEventListener("click", fetchResult);
+  refreshBtn.addEventListener("click", fetchResult);
+  printBtn.addEventListener("click", ()=>window.print());
+  document.getElementById("hrefPrint").addEventListener("click", e=>{ e.preventDefault(); window.print(); });
+  regInput.addEventListener("keyup", e => { if(e.key === "Enter") fetchResult(); });
+
+  // init: hide result sections initially (tables only shown after successful fetch)
+  clearPage();
+  setStatus("Idle");
+</script>
+</body>
+</html>

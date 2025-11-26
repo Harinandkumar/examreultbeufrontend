@@ -1,0 +1,60 @@
+/* styles.css - official-like layout (responsive) */
+*{box-sizing:border-box}
+body{font-family:Tahoma,Arial,Helvetica,sans-serif;margin:0;background:#fff;color:#222}
+.wrapper{width:100%;max-width:1100px;margin:12px auto;padding:0 12px}
+.clear:after{content:"";display:block;clear:both}
+.logo{max-width:220px;display:block}
+.logo-wrap{float:left}
+.header-info{float:right;padding-top:20px}
+
+/* card-like search */
+.card{background:#fff;padding:14px;border:1px solid #e3eaef;border-radius:6px;margin-bottom:12px;box-shadow:0 6px 20px rgba(21,40,70,0.04)}
+.search-grid{display:flex;flex-wrap:wrap;gap:12px}
+.form-row{min-width:180px;flex:1}
+.form-row label{display:block;margin-bottom:6px;font-weight:600}
+.form-row input, .form-row select{width:100%;padding:8px;border:1px solid #dcdfe6;border-radius:5px}
+.actions{display:flex;align-items:center;gap:10px;margin-top:10px}
+.btn{padding:8px 12px;border-radius:6px;border:1px solid #cfd8e6;background:#fff;cursor:pointer;font-weight:700}
+.btn.primary{background:#ff5370;color:#fff;border:none}
+.btn.outline{background:transparent;border:1px solid #ddd}
+.status{margin-left:12px;font-weight:600;color:#666}
+
+/* result style to mimic official table look */
+.printarea{background:#fff;padding:12px;border:1px solid #e3eaef;border-radius:6px;margin-top:12px}
+.style9{font-size:20px;font-weight:700;text-align:center;text-transform:uppercase}
+.style1{width:100%;border-collapse:collapse}
+.style1 td{padding:8px}
+.style5{padding:8px}
+.style11{width:472px;padding:8px}
+.caption{font-weight:bold}
+
+/* tables */
+table[border="1"]{border-collapse:collapse;margin-bottom:12px}
+table[border="1"] th, table[border="1"] td{padding:8px;border:1px solid #dfeaf7}
+table[border="1"] th{background:#f8fbff;font-weight:700}
+
+/* theory/practical captions */
+caption{font-weight:700;margin-bottom:6px}
+
+/* responsive two-column for tables on wide screens */
+@media (min-width:900px){
+  #ContentPlaceHolder1_GridView1, #ContentPlaceHolder1_GridView2 { width:49%; display:inline-table; vertical-align:top; }
+}
+
+/* hidden helper */
+.hidden{display:none}
+
+/* print styles */
+@media print{
+  body{background:#fff}
+  .search-card, .note{display:none}
+  .printbtn, #getBtn, #refreshBtn, #printBtn{display:none}
+  .printarea{box-shadow:none;border:none}
+}
+
+/* small screens */
+@media (max-width:520px){
+  .search-grid{flex-direction:column}
+  .logo{max-width:140px}
+  .style11{width:auto}
+}
